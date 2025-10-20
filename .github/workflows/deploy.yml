@@ -1,4 +1,4 @@
-name: CI/CD for Spring Boot Backend
+name: CI/CD for Spring Boot Backend (Gradle)
 
 on:
   push:
@@ -21,23 +21,27 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3️⃣ Build Spring Boot app (tạo file JAR)
-      - name: Build Spring Boot app
-        run: mvn clean package -DskipTests
+      # 3️⃣ Cấp quyền cho Gradle Wrapper
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      # 4️⃣ Đăng nhập Docker Hub
+      # 4️⃣ Build Spring Boot app bằng Gradle
+      - name: Build Spring Boot app
+        run: ./gradlew clean build -x test
+
+      # 5️⃣ Đăng nhập Docker Hub
       - name: Log in to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      # 5️⃣ Build Docker image và đẩy lên Docker Hub
+      # 6️⃣ Build Docker image và đẩy lên Docker Hub
       - name: Build & Push Docker image
         run: |
           IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/fwfe-backend:latest
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
-      # 6️⃣ SSH vào VPS để pull image mới và khởi động container
+      # 7️⃣ SSH vào VPS để pull image mới và khởi động container
       - name: Deploy to VPS using password
         uses: appleboy/ssh-action@master
         with:
