@@ -1,0 +1,49 @@
+name: CI/CD for Spring Boot Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Spring Boot app
+        run: mvn clean package -DskipTests
+
+      - name: Deploy to VPS using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          password: ${{ secrets.VPS_PASS }}
+          script: |
+            echo "==== 🚀 Deploying Spring Boot app ===="
+            cd /root/fwfe || mkdir /root/fwfe && cd /root/fwfe
+
+            if [ -d ".git" ]; then
+              git pull
+            else
+              git clone https://github.com/${{ github.repository }} .
+            fi
+
+            echo "DB_URL=${{ secrets.DB_URL }}" > .env
+            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+            ./mvnw clean package -DskipTests
+            pkill -f 'fwfe-0.0.1-SNAPSHOT.jar' || true
+            nohup java -jar target/fwfe-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
+            echo "✅ Deploy thành công!"
