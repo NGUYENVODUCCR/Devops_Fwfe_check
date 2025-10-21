@@ -35,11 +35,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/", "/index.html", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/auth/**", "/api/chat/**", "/api/companies").permitAll()
-
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/admin/*").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
