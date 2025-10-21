@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {"http://152.42.196.211","http://10.0.2.2:8000", "http://127.0.0.1:8000", "http://152.42.196.211:80"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://152.42.196.211:*","http://10.0.2.2:8000", "http://127.0.0.1:8000"}, allowCredentials = "true")
 public class ForgotPasswordController {
 
     @Autowired
