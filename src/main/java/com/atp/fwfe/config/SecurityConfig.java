@@ -92,6 +92,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOriginPatterns(List.of(
                 "http://152.42.196.211",
+                "http://152.42.196.211:*",
                 "http://localhost:*",
                 "http://127.0.0.1:*",
                 "http://10.0.2.2:*"
