@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = {
+        "https://fwfe.duckdns.org",
         "http://152.42.196.211:3000",
         "http://10.0.2.2:8000",
         "http://127.0.0.1:8000",

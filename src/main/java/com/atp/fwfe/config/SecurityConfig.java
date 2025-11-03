@@ -91,6 +91,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of(
+                "https://fwfe.duckdns.org",
                 "http://152.42.196.211",
                 "http://152.42.196.211:*",
                 "http://localhost:*",
