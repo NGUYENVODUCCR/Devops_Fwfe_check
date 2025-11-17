@@ -92,6 +92,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOriginPatterns(List.of(
                 "https://fwfe.duckdns.org",
+                "https://fwfe.duckdns.org:81",
                 "http://152.42.196.211",
                 "http://152.42.196.211:*",
                 "http://localhost:*",
