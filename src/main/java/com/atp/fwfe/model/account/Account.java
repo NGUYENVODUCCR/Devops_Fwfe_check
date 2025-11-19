@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import java.util.Set;
+import java.util.HashSet;
+import com.atp.fwfe.model.chat.ChatMessage;
 
 import java.time.LocalDateTime;
 import java.util.List;
