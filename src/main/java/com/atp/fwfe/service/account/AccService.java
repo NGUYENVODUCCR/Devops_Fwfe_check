@@ -11,6 +11,10 @@ import com.atp.fwfe.model.account.Account;
 import com.atp.fwfe.model.work.Company;
 import com.atp.fwfe.repository.account.AccRepository;
 import com.atp.fwfe.repository.report.ReportRepository;
+import com.atp.fwfe.repository.chat.ChatMessageRepository;
+import com.atp.fwfe.repository.work.WorkAcceptanceRepository;
+import com.atp.fwfe.repository.work.WorkPostedRepository;
+import com.atp.fwfe.repository.work.CompanyRepository;
 import com.atp.fwfe.security.JwtUtil;
 import com.atp.fwfe.service.mailer.MailService;
 import com.atp.fwfe.service.work.CompanyService;
@@ -36,16 +40,24 @@ public class AccService {
     private final AuthenticationManager authenticationManager;
     private final TokenBlacklistService tokenBlacklistService;
     private final ReportRepository reportRepository;
+    private final ChatMessageRepository chatMessageRepository;
+    private final WorkAcceptanceRepository workAcceptanceRepository;
+    private final WorkPostedRepository workPostedRepository;
+    private final CompanyRepository companyRepository;
     private final MailService mailService;
     private final CompanyService companyService;
 
-    public AccService(AccRepository accRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, TokenBlacklistService tokenBlacklistService, ReportRepository reportRepository, MailService mailService, CompanyService companyService) {
+    public AccService(AccRepository accRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager, TokenBlacklistService tokenBlacklistService, ReportRepository reportRepository, MailService mailService, CompanyService companyService, ChatMessageRepository chatMessageRepository, WorkAcceptanceRepository workAcceptanceRepository, WorkPostedRepository workPostedRepository, CompanyRepository companyRepository) {
         this.accRepository = accRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.tokenBlacklistService = tokenBlacklistService;
         this.reportRepository = reportRepository;
+        this.chatMessageRepository = chatMessageRepository;
+        this.workAcceptanceRepository = workAcceptanceRepository;
+        this.workPostedRepository = workPostedRepository;
+        this.companyRepository = companyRepository;
         this.mailService = mailService;
         this.companyService = companyService;
     }
@@ -248,8 +260,26 @@ public class AccService {
         return accRepository.save(account);
     }
 
+    @Transactional
     public void delete(Long id) {
-        accRepository.deleteById(id);
+        Account acc = accRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        for (ChatMessage msg : acc.getReadMessages()) {
+            msg.getReadBy().remove(acc);
+        }
+        chatMessageRepository.saveAll(acc.getReadMessages());
+
+        reportRepository.deleteAllByReporter_Id(id);
+        reportRepository.deleteAllByReported_Id(id);
+
+        workAcceptanceRepository.deleteAllByAccount_Id(id);
+
+        workPostedRepository.deleteAllByCreatedBy_Id(id);
+
+        companyRepository.deleteAllByCreatedBy_Id(id);
+
+        accRepository.delete(acc);
     }
 
 

@@ -22,4 +22,6 @@ public interface WorkPostedRepository extends JpaRepository<WorkPosted, Long> {
     @Query("SELECT w FROM WorkPosted w JOIN w.acceptances a WHERE a.account.id = :accountId")
     List<WorkPosted> findByAcceptedById(@Param("accountId") Long accountId);
 
+    void deleteAllByCreatedBy_Id(Long createdById);
+
 }

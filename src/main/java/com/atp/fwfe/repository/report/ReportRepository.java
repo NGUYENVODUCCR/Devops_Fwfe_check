@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByResolvedFalse();
+    void deleteAllByReporter_Id(Long reporterId);
+    void deleteAllByReported_Id(Long reportedId);
+
 }

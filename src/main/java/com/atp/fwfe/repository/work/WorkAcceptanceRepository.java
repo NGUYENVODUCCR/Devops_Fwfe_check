@@ -9,6 +9,7 @@ public interface WorkAcceptanceRepository extends JpaRepository<WorkAcceptance, 
     List<WorkAcceptance> findByWorkPostedId(Long workPostedId);
     List<WorkAcceptance> findByAccountId(Long accountId);
     List<WorkAcceptance> findByWorkPostedIdAndAccountIdAndStatus(Long workId, Long accountId, WorkStatus status);
+    void deleteAllByAccount_Id(Long accountId);
 
 
 }

@@ -17,5 +17,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             OR LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
     """)
     List<Company> searchAllFields(String keyword);
+    void deleteAllByCreatedBy_Id(Long createdById);
 
 }
