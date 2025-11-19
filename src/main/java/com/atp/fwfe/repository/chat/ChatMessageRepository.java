@@ -36,5 +36,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     @Query("SELECT DISTINCT m.sender FROM ChatMessage m WHERE m.receiver = :receiver")
     List<String> findDistinctSenderUsernamesTo(@Param("receiver") String receiver);
 
+    List<ChatMessage> findByReadBy_Id(Long accountId); 
 
 }
