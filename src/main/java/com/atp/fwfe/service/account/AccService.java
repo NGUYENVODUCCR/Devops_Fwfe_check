@@ -262,8 +262,8 @@ public class AccService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        Account acc = accRepository.findById(id)
+    public void delete(Long accountId) {
+        Account acc = accRepository.findById(accountId)
             .orElseThrow(() -> new RuntimeException("Account not found"));
 
         for (ChatMessage msg : acc.getReadMessages()) {
@@ -271,17 +271,18 @@ public class AccService {
         }
         chatMessageRepository.saveAll(acc.getReadMessages());
 
-        reportRepository.deleteAllByReporter_Id(id);
-        reportRepository.deleteAllByReported_Id(id);
+        reportRepository.deleteAllByReporter_Id(accountId);
+        reportRepository.deleteAllByReported_Id(accountId);
 
-        workAcceptanceRepository.deleteAllByAccount_Id(id);
+        workAcceptanceRepository.deleteAllByAccount_Id(accountId);
 
-        workPostedRepository.deleteAllByCreatedBy_Id(id);
+        workPostedRepository.deleteAllByCreatedBy_Id(accountId);
 
-        companyRepository.deleteAllByCreatedBy_Id(id);
+        companyRepository.deleteAllByCreatedBy_Id(accountId);
 
         accRepository.delete(acc);
     }
+
 
 
     //ADMIN kết thúc

@@ -79,6 +79,11 @@ public class Account {
     @JsonIgnore
     private List<WorkAcceptance> acceptedWorks;
 
+    @ManyToMany(mappedBy = "readBy")
+    @JsonIgnore
+    private Set<ChatMessage> readMessages = new HashSet<>();
+
+
     public Account() {}
     public Account(String username, String password, String email, String name, String role) {
         this.username = username;
