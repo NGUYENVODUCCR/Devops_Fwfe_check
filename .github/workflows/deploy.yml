@@ -64,6 +64,8 @@ jobs:
               -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e SPRING_MAIL_USERNAME=${{ secrets.SPRING_MAIL_USERNAME }} \
+              -e SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }} \
               ${{ secrets.DOCKER_USERNAME }}/fwfe-backend:latest
 
             echo "✅ Deploy thành công! Ứng dụng đang chạy trên cổng 8080."
