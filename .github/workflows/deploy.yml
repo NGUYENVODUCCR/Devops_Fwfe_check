@@ -75,7 +75,7 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" \
-              -e SENDGRID_FROM="noreply@yourdomain.com" \
+              -e SENDGRID_FROM="nguyenvoduc2k4@gmail.com" \
               ${{ secrets.DOCKER_USERNAME }}/fwfe-backend:latest
 
             echo "✅ Deploy thành công! Ứng dụng đang chạy trên cổng 8080."
