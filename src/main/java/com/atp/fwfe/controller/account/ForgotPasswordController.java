@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException; 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,7 +22,7 @@ public class ForgotPasswordController {
     private PasswordResetTokenService passwordResetTokenService;
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) throws IOException {
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         try {
             return passwordResetTokenService.sendResetCode(request.getEmail());
         } catch (IOException e) {
