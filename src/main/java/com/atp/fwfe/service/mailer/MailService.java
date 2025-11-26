@@ -72,7 +72,7 @@ public class MailService {
         sendHtml(email, subject, html);
     }
 
-    private void sendHtml(String to, String subject, String html) throws IOException {
+    public void sendHtml(String to, String subject, String html) throws IOException {
         Email from = new Email(fromEmail);
         Email toEmail = new Email(to);
         Content content = new Content("text/html", html);

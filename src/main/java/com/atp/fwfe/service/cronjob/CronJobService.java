@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import com.sendgrid.*;
+import java.io.IOException;
+
 
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class CronJobService {
                 } catch (IOException e) {
                     log.error("❌ Gửi lỗi tới {}: {}", email, e.getMessage());
                 }
-                
+
             } else {
                 log.warn("⚠️ Bỏ qua email không hợp lệ: {}", email);
             }
