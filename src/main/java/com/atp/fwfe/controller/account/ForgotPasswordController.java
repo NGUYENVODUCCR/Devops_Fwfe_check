@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.io.IOException; 
 
 @RestController
 @RequestMapping("/api/auth")
@@ -18,8 +19,13 @@ public class ForgotPasswordController {
     private PasswordResetTokenService passwordResetTokenService;
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) throws MessagingException {
-        return passwordResetTokenService.sendResetCode(request.getEmail());
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) throws IOException {
+        try {
+            return passwordResetTokenService.sendResetCode(request.getEmail());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Không thể gửi mã reset, vui lòng thử lại sau.");
+        }
     }
 
     @PostMapping("/verify-code")
