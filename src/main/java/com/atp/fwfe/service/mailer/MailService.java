@@ -70,7 +70,7 @@ public class MailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom("dokyha2004@gmail.com");
+        helper.setFrom(System.getenv("SPRING_MAIL_USERNAME"));
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(html, true);
