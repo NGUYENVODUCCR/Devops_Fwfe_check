@@ -44,9 +44,10 @@ public class CronJobService {
                     mailService.sendNewJobNotification(email, newJobs);
                     sentCount++;
                     log.info("📧 Đã gửi cho: {}", email);
-                } catch (MessagingException e){
+                } catch (IOException e) {
                     log.error("❌ Gửi lỗi tới {}: {}", email, e.getMessage());
                 }
+                
             } else {
                 log.warn("⚠️ Bỏ qua email không hợp lệ: {}", email);
             }

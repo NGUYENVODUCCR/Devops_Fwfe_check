@@ -1,26 +1,25 @@
 package com.atp.fwfe.service.mailer;
 
 import com.atp.fwfe.model.work.WorkPosted;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.sendgrid.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${sendgrid.api.key}")
+    private String sendGridApiKey;
 
-    @Value("${spring.mail.from}")
+    @Value("${sendgrid.from}")
     private String fromEmail;
 
-    public void sendWelcomeEmail(String email, String name) throws MessagingException{
+    public void sendWelcomeEmail(String email, String name) throws IOException {
         String subject = "🎉 Chào mừng bạn đến với hệ thống của chúng tôi!";
         String html = """
                <div style="font-family: Arial, sans-serif; color: #333;">
@@ -31,11 +30,12 @@ public class MailService {
                   <p style="margin-top: 20px;">Trân trọng,<br/><strong>Đội ngũ Hệ thống Việc Làm</strong></p>
                </div>
                """.formatted(name);
+
         sendHtml(email, subject, html);
     }
 
-    public void sendWeeklyThanks(String email, String name) throws MessagingException{
-        String subject = " Cảm ơn bạn đã luôn đồng hành cùng cộng đồng!";
+    public void sendWeeklyThanks(String email, String name) throws IOException {
+        String subject = "Cảm ơn bạn đã luôn đồng hành cùng cộng đồng!";
         String html= """
                  <div style="font-family: Arial, sans-serif; color: #333;">
                     <p>Chúng tôi rất biết ơn sự đồng hành của bạn trong tuần vừa qua.</p>
@@ -44,10 +44,11 @@ public class MailService {
                     <p><strong>Hệ thống Việc Làm</strong></p>
                 </div>
                 """.formatted(name);
+
         sendHtml(email, subject, html);
     }
 
-    public void sendNewJobNotification(String email, List<WorkPosted> jobs) throws MessagingException{
+    public void sendNewJobNotification(String email, List<WorkPosted> jobs) throws IOException {
         String subject = "🆕 Việc làm mới dành cho bạn!";
         StringBuilder jobListHtml = new StringBuilder();
 
@@ -71,16 +72,24 @@ public class MailService {
         sendHtml(email, subject, html);
     }
 
-    public void sendHtml(String to, String subject, String html) throws MessagingException{
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+    private void sendHtml(String to, String subject, String html) throws IOException {
+        Email from = new Email(fromEmail);
+        Email toEmail = new Email(to);
+        Content content = new Content("text/html", html);
+        Mail mail = new Mail(from, subject, toEmail, content);
 
-        helper.setFrom(fromEmail);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(html, true);
+        SendGrid sg = new SendGrid(sendGridApiKey);
+        Request request = new Request();
 
-        mailSender.send(message);
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        request.setBody(mail.build());
+
+        Response response = sg.api(request);
+        if (response.getStatusCode() >= 400) {
+            throw new IOException("SendGrid gửi mail thất bại: " + response.getBody());
+        }
+
         System.out.println("✅ Đã gửi email tới người dùng: " + to);
     }
 }
