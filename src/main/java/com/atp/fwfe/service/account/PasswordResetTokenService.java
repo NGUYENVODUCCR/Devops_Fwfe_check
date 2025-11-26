@@ -25,7 +25,7 @@ public class PasswordResetTokenService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> sendResetCode(String email) throws MessagingException {
+    public ResponseEntity<?> sendResetCode(String email) throws IOException {
         Optional<Account> optional = accRepository.findByEmail(email);
         if (optional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
