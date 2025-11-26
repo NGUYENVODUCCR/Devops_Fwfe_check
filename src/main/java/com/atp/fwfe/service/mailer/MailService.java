@@ -8,6 +8,8 @@ import com.sendgrid.helpers.mail.objects.Content;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import java.io.IOException;
 import java.util.List;
@@ -56,9 +58,13 @@ public class MailService {
         StringBuilder jobListHtml = new StringBuilder();
 
         for (WorkPosted job : jobs){
+
+            NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+            String formattedSalary = nf.format(job.getSalary());
+
             jobListHtml.append("<li>")
                     .append("<strong>").append("Vị trí tuyển dụng: ").append(job.getPosition()).append("</strong>")
-                    .append(" - Mức lương cơ bản: ").append(job.getSalary()).append("₫")
+                    .append(" - Mức lương cơ bản: ").append(formattedSalary).append("₫")
                     .append(" Địa chỉ: ").append(job.getCompany().getAddress())
                     .append("</li>");
         }
