@@ -76,7 +76,7 @@ public class CronJobService {
                 try {
                     mailService.sendWeeklyThanks(email, name);
                     sent++;
-                } catch (MessagingException e) {
+                } catch (IOException e) { 
                     log.error("❌ Gửi lỗi tới {}: {}", email, e.getMessage());
                 }
             }
