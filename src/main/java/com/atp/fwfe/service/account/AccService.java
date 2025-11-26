@@ -92,7 +92,7 @@ public class AccService {
         if (saved.getEmail() != null && saved.getEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             try {
                 mailService.sendWelcomeEmail(saved.getEmail(), saved.getName());
-            } catch (IOException | MessagingException e) {
+            } catch (IOException e) {
                 System.err.println("Lỗi gửi email chào mừng: " + e.getMessage());
             }
         }
@@ -199,7 +199,7 @@ public class AccService {
         if (saved.getEmail() != null && saved.getEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             try {
                 mailService.sendWelcomeEmail(saved.getEmail(), saved.getName());
-            } catch (IOException | MessagingException e) {
+            } catch (IOException e) {
                 System.err.println("Lỗi gửi email chào mừng: " + e.getMessage());
             }
         }
