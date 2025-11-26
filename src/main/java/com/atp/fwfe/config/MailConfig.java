@@ -10,5 +10,8 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
- // Dự phòng thui
+ @Bean
+    public JavaMailSender javaMailSender() {
+        return new JavaMailSenderImpl();
+    }
 }
