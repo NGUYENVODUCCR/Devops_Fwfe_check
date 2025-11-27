@@ -45,15 +45,15 @@ public class PasswordResetTokenService {
         String code = UUID.randomUUID().toString().substring(0, 8);
 
         PasswordResetToken resetToken = new PasswordResetToken(code, account, Duration.ofMinutes(15));
-        passwordResetTokenRepository.saveAndFlush(resetToken);
+        passwordResetTokenRepository.saveAndFlush(resetToken); 
 
         String subject = "Mã xác minh đặt lại mật khẩu";
         String content = """
             <div style="font-family:Arial; color:#333;">
-              <h2>Mã xác minh của bạn</h2>
-              <p>Nhập mã này vào ứng dụng để đặt lại mật khẩu:</p>
-              <h1 style="color:#2d8cf0;">%s</h1>
-              <p>Mã sẽ hết hạn sau 15 phút.</p>
+            <h2>Mã xác minh của bạn</h2>
+            <p>Nhập mã này vào ứng dụng để đặt lại mật khẩu:</p>
+            <h1 style="color:#2d8cf0;">%s</h1>
+            <p>Mã sẽ hết hạn sau 15 phút.</p>
             </div>
             """.formatted(code);
 
