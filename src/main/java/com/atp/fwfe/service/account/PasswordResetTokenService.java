@@ -38,6 +38,12 @@ public class PasswordResetTokenService {
         Account account = optional.get();
 
         passwordResetTokenRepository.deleteByAccount(account);
+        passwordResetTokenRepository.flush();
+
+        String code;
+        do {
+            code = String.format("%06d", new Random().nextInt(999999));
+        } while(passwordResetTokenRepository.findByToken(code).isPresent());
 
         String code = String.format("%06d", new Random().nextInt(999999));
         PasswordResetToken resetToken = new PasswordResetToken(code, account, Duration.ofMinutes(15));
