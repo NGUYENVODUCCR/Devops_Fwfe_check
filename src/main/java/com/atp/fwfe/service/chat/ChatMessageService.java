@@ -11,13 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @Service
 public class ChatMessageService {
 
@@ -73,8 +74,8 @@ public class ChatMessageService {
         return chatRepository.findDistinctSenderUsernamesTo(myUsername);
     }
 
-    @Scheduled(cron = "0 0 * * * *")
-    public void cleanOldMessagesForAllUsers(){
+    @Transactional
+    public void cleanOldMessages() {
         List<String> allReceivers = chatRepository.findAllReceivers();
         int totalDeleted = 0;
 
@@ -87,6 +88,16 @@ public class ChatMessageService {
         }
 
         System.out.println("🧹 Đã tự động xoá " + totalDeleted + " tin nhắn cũ.");
+    }
+
+
+    @Scheduled(cron = "0 0 * * * *") 
+    public void scheduledCleanMessages() {
+        try {
+            cleanOldMessages();
+        } catch (Exception e) {
+            log.error("❌ Lỗi khi dọn tin nhắn", e);
+        }
     }
 
 }
