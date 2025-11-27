@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.IOException; 
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class PasswordResetTokenService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public ResponseEntity<?> sendResetCode(String email) throws IOException {
         Optional<Account> optional = accRepository.findByEmail(email);
         if (optional.isEmpty()) {
@@ -56,6 +58,7 @@ public class PasswordResetTokenService {
         return ResponseEntity.ok("Đã gửi mã xác minh đến email.");
     }
 
+    @Transactional
     public ResponseEntity<?> verifyCode(String email, String code) {
         Optional<Account> optional = accRepository.findByEmail(email);
         if (optional.isEmpty()) {
@@ -83,6 +86,7 @@ public class PasswordResetTokenService {
         return ResponseEntity.ok("Mã hợp lệ.");
     }
 
+    @Transactional
     public ResponseEntity<?> resetPassword(String email, String code, String newPassword) {
         Optional<Account> optional = accRepository.findByEmail(email);
         if (optional.isEmpty()) {
