@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.IOException; 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import java.util.UUID;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public class PasswordResetTokenService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity<?> sendResetCode(String email) throws IOException {
         Optional<Account> optional = accRepository.findByEmail(email);
         if (optional.isEmpty()) {
@@ -40,13 +42,10 @@ public class PasswordResetTokenService {
         passwordResetTokenRepository.deleteByAccount(account);
         passwordResetTokenRepository.flush();
 
-        String code;
-        do {
-            code = String.format("%06d", new Random().nextInt(999999));
-        } while(passwordResetTokenRepository.findByToken(code).isPresent());
+        String code = UUID.randomUUID().toString().substring(0, 8);
 
         PasswordResetToken resetToken = new PasswordResetToken(code, account, Duration.ofMinutes(15));
-        passwordResetTokenRepository.save(resetToken);
+        passwordResetTokenRepository.saveAndFlush(resetToken);
 
         String subject = "Mã xác minh đặt lại mật khẩu";
         String content = """
