@@ -75,6 +75,7 @@ public class ChatMessageService {
         return chatRepository.findDistinctSenderUsernamesTo(myUsername);
     }
 
+
     @Transactional
     public void cleanOldMessages() {
         List<String> allReceivers = chatRepository.findAllReceivers();
@@ -89,16 +90,6 @@ public class ChatMessageService {
         }
 
         System.out.println("🧹 Đã tự động xoá " + totalDeleted + " tin nhắn cũ.");
-    }
-
-
-    @Scheduled(cron = "0 0 * * * *") 
-    public void scheduledCleanMessages() {
-        try {
-            cleanOldMessages();
-        } catch (Exception e) {
-            log.error("❌ Lỗi khi dọn tin nhắn", e);
-        }
     }
 
 }
