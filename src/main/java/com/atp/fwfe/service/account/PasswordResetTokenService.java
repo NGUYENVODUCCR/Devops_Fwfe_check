@@ -45,7 +45,6 @@ public class PasswordResetTokenService {
             code = String.format("%06d", new Random().nextInt(999999));
         } while(passwordResetTokenRepository.findByToken(code).isPresent());
 
-        String code = String.format("%06d", new Random().nextInt(999999));
         PasswordResetToken resetToken = new PasswordResetToken(code, account, Duration.ofMinutes(15));
         passwordResetTokenRepository.save(resetToken);
 
