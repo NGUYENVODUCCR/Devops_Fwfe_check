@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = {
-        "https://fwfe.duckdns.org",
-        "https://fwfe.duckdns.org:81",
-        "http://152.42.196.211:3000",
+        "https://findwork.duckdns.org",
+        "https://findwork.duckdns.org:81",
+        "http://167.172.86.90:3000",
         "http://10.0.2.2:8000",
         "http://127.0.0.1:8000",
         "http://localhost:*"
