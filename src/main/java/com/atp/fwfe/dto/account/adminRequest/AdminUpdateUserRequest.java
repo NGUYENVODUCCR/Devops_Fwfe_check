@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class AdminUpdateUserRequest {
 
-    // username sẽ do người dùng tự đặt, password sẽ do người dùng quên mật khẩu -> đặt lại
     private String email;
     private String role;
     private boolean locked;

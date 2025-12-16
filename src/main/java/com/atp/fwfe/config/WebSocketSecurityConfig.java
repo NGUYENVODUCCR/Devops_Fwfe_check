@@ -46,7 +46,6 @@ public class WebSocketSecurityConfig implements WebSocketMessageBrokerConfigurer
                                 String role = jwtUtil.extractRole(token);
 
                                 if (!jwtUtil.isTokenExpired(token)) {
-                                    // Chuyển role thành authority cho Spring Security
                                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
                                     UsernamePasswordAuthenticationToken authentication =
                                             new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));

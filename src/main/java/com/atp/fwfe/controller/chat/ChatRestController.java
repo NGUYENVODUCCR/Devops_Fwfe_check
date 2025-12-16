@@ -39,7 +39,7 @@ public class ChatRestController {
                         m.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         m.getType().toString(),
                         (m.getReadBy() == null || m.getReadBy().isEmpty())
-                                ? new ArrayList<>() // fallback: tránh null
+                                ? new ArrayList<>() 
                                 : m.getReadBy().stream().map(Account::getUsername).toList(),
                         false
                 ))

@@ -13,7 +13,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Xử lý lỗi validate @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidation(MethodArgumentNotValidException ex) {
@@ -23,21 +22,18 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    // Lỗi khi không tìm thấy entity (EntityNotFoundException)
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNotFound(EntityNotFoundException ex) {
         return Map.of("error", ex.getMessage());
     }
 
-    // Lỗi phân quyền (SecurityException)
     @ExceptionHandler(SecurityException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Map<String, String> handleForbidden(SecurityException ex) {
         return Map.of("error", ex.getMessage());
     }
 
-    // Xử lý rõ ràng cho ResponseStatusException
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> handleResponseStatus(ResponseStatusException ex) {
         return ResponseEntity
@@ -48,10 +44,9 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // Catch all cho các lỗi còn lại
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleOther(Exception ex) {
-        ex.printStackTrace(); // Log đầy đủ ra console
+        ex.printStackTrace(); 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(

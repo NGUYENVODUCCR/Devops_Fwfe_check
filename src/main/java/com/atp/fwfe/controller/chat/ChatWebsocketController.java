@@ -28,7 +28,7 @@ public class ChatWebsocketController {
 
     @MessageMapping("/chat.group")
     public void sendGroupMessage(@Valid ChatMessageRequest request, Principal principal) {
-        String sender = principal.getName(); // đã được WebSocketSecurityConfig giải mã từ JWT
+        String sender = principal.getName(); 
 
         ChatMessage message = new ChatMessage();
         message.setSender(sender);

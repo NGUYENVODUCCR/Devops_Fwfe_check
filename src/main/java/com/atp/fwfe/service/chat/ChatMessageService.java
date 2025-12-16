@@ -62,10 +62,10 @@ public class ChatMessageService {
         List<ChatMessage> messages = chatRepository
                 .findPrivateChatBetweenUsers(user1, user2, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "timestamp")));
 
-        Collections.reverse(messages); // Trả về từ cũ đến mới
+        Collections.reverse(messages);
 
         return messages.stream()
-                .map(msg -> ChatMessageResponse.fromEntity(msg, user1)) // Truyền username vào đây
+                .map(msg -> ChatMessageResponse.fromEntity(msg, user1)) 
                 .collect(Collectors.toList());
     }
 
